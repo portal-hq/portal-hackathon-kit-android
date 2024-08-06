@@ -6,23 +6,23 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.platform.LocalContext
 import io.portalhq.portalhackathon.core.notification.NotificationCommand
-import io.portalhq.portalhackathon.core.viewstate.ViewState
 
 @Composable
 fun ScreenNotification(
     snackbarHostState: SnackbarHostState,
-    notificationCommand: NotificationCommand
+    notificationCommand: NotificationCommand?
 ) {
-    val context = LocalContext.current
-    LaunchedEffect(key1 = notificationCommand) {
-        snackbarHostState.showSnackbar(notificationCommand.resolveMessage(context))
-    }
-}
+    notificationCommand ?: return
 
-@Composable
-fun <V: ViewState> ScreenNotification(notificationCommand: NotificationCommand) {
     val context = LocalContext.current
     LaunchedEffect(key1 = notificationCommand) {
-        Toast.makeText(context, notificationCommand.resolveMessage(context), Toast.LENGTH_SHORT).show()
+        when (notificationCommand) {
+            is NotificationCommand.Important, is NotificationCommand.Error -> {
+                snackbarHostState.showSnackbar(notificationCommand.resolveMessage(context))
+            }
+            is NotificationCommand.Normal -> {
+                Toast.makeText(context, notificationCommand.resolveMessage(context), Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 }

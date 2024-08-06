@@ -34,6 +34,10 @@ abstract class ScreenBaseViewModel<VIEW_STATE : ViewState> : BaseViewModel<VIEW_
         notificationCommand.emitCo(NotificationCommand.Normal(message))
     }
 
+    fun notifyImportant(message: String) {
+        notificationCommand.emitCo(NotificationCommand.Important(message))
+    }
+
     fun notifyError(message: String?) {
         notificationCommand.emitCo(NotificationCommand.Error(message))
     }

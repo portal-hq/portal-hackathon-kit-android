@@ -17,6 +17,12 @@ sealed class NotificationCommand(
         override val messageResId: Int? = null
     ) : NotificationCommand(message, messageResId)
 
+    data class Important(
+        override val message: String?,
+        @StringRes
+        override val messageResId: Int? = null
+    ) : NotificationCommand(message, messageResId)
+
     data class Error(
         override val message: String? = null,
         @StringRes
