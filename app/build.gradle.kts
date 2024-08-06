@@ -69,6 +69,10 @@ dependencies {
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.kotlin.coroutines.android)
 
+    // Retrofit for API integration
+    implementation(libs.retrofit.android)
+    implementation(libs.retrofit.gson.converter)
+
     // Testing related libs
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
