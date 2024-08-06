@@ -5,7 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import io.portalhq.portalhackathon.ui.screens.AppScreen
-import io.portalhq.portalhackathon.ui.screens.HomeScreen
+import io.portalhq.portalhackathon.ui.screens.home.HomeScreen
 
 @Composable
 fun AppNavigation() {

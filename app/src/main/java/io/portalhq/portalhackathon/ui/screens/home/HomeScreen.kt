@@ -1,4 +1,4 @@
-package io.portalhq.portalhackathon.ui.screens
+package io.portalhq.portalhackathon.ui.screens.home
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material3.Button
@@ -6,7 +6,10 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import io.portalhq.portalhackathon.presentation.home.HomeViewModel
@@ -25,7 +28,10 @@ fun HomeScreen(
     val snackbarHostState = remember {
         SnackbarHostState()
     }
-    AppScaffold(title = "Portal Hackathon") {
+    AppScaffold(
+        title = "Portal Hackathon",
+        snackbarHostState = snackbarHostState
+    ) {
         HomeScreenUI(viewModel = viewModel, viewState = viewState.value)
     }
 
@@ -46,12 +52,15 @@ fun HomeScreen(
 
 @Composable
 private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
+    var counter by remember {
+        mutableIntStateOf(0)
+    }
     Column {
         Text(text = "Home Screen - Hello World with address: ${viewState.solanaAddress}")
-        Button(onClick = { viewModel.showToast("Hello World") }) {
+        Button(onClick = { viewModel.showToast("Hello World ${counter++}") }) {
             Text(text = "Show Toast")
         }
-        Button(onClick = { viewModel.showSnackbar("Hello World") }) {
+        Button(onClick = { viewModel.showSnackbar("Hello World ${counter++}") }) {
             Text(text = "Show Snackbar")
         }
     }
