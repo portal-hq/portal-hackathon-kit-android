@@ -73,6 +73,9 @@ dependencies {
     implementation(libs.retrofit.android)
     implementation(libs.retrofit.gson.converter)
 
+    // Logging libs
+    implementation(libs.timber.android)
+
     // Testing related libs
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
