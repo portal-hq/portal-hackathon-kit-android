@@ -15,6 +15,7 @@ navigation = "2.7.7"
 hilt = "1.2.0"
 dagger-hilt = "2.49"
 portal = "4.1.0"
+okhttp3 = "4.12.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -41,10 +42,17 @@ retrofit-android = { group = "com.squareup.retrofit2", name = "retrofit", versio
 retrofit-gson-converter = { group = "com.squareup.retrofit2", name = "converter-gson", version.ref = "retrofit" }
 timber-android = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigation" }
+
+#hilt
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt" }
 dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt"}
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger-hilt" }
 portal-android = { group = "io.portalhq.android", name = "portal-android", version.ref = "portal" }
+
+#okhttp libs
+okhttp3-android-bom = { group = "com.squareup.okhttp3", name = "okhttp-bom", version.ref = "okhttp3" }
+okhttp3-android = { group = "com.squareup.okhttp3", name = "okhttp" }
+okhttp3-logginginterceptor-android = { group = "com.squareup.okhttp3", name = "logging-interceptor" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

@@ -94,6 +94,11 @@ dependencies {
     // Portal SDK
     implementation(libs.portal.android)
 
+    //okhttp libs
+    implementation(platform(libs.okhttp3.android.bom))
+    implementation(libs.okhttp3.android)
+    implementation(libs.okhttp3.logginginterceptor.android)
+
     // Testing related libs
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
