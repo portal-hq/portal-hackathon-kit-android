@@ -65,6 +65,20 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun backupWallet() {
+        launchOperation {
+            portalRepository.backupWalletWithPassword()
+            notify("Wallet backed up successfully")
+        }
+    }
+
+    fun recoverWallet() {
+        launchOperation {
+            portalRepository.recoverWalletWithPassword()
+            notify("Wallet recovered successfully")
+        }
+    }
+
     private fun launchOperation(operation: suspend () -> Unit) {
         launchWithDefaultErrorHandling(onEndWithError = {
             updateState { it.copy(isDataLoading = false, isRefreshing = false) }

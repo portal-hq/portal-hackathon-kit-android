@@ -1,6 +1,9 @@
 package io.portalhq.portalhackathon.data
 
 import io.portalhq.android.Portal
+import io.portalhq.android.mpc.data.BackupConfigs
+import io.portalhq.android.mpc.data.BackupMethods
+import io.portalhq.android.mpc.data.PasswordStorageConfig
 import io.portalhq.android.provider.data.PortalRequestMethod
 import io.portalhq.android.storage.mobile.PortalNamespace
 import io.portalhq.portalhackathon.core.commonconstants.BlockChainConstants
@@ -10,7 +13,7 @@ import javax.inject.Inject
 
 class PortalRepository @Inject constructor(
     private val portal: Portal,
-    private val portalSolanaApi: PortalSolanaApi
+    private val portalSolanaApi: PortalSolanaApi,
 ) {
     suspend fun createWallet() {
         if (!portal.isWalletOnDevice()) {
@@ -48,5 +51,19 @@ class PortalRepository @Inject constructor(
             method = PortalRequestMethod.sol_signAndSendTransaction,
             params = listOf(transaction.transaction)
         ).result as String
+    }
+
+    suspend fun backupWalletWithPassword(password: String = "0000") {
+        portal.backupWallet(
+            backupMethod = BackupMethods.Password,
+            backupConfigs = BackupConfigs(PasswordStorageConfig(password))
+        )
+    }
+
+    suspend fun recoverWalletWithPassword(password: String = "0000"): String {
+        return portal.recoverWallet(
+            backupMethod = BackupMethods.Password,
+            backupConfigs = BackupConfigs(PasswordStorageConfig(password))
+        )
     }
 }

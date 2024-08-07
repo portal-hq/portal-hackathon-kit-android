@@ -155,5 +155,13 @@ private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
                 Text(text = "Most recent transaction hash: ${viewState.mostRecentTransactionHash}")
             }
         }
+
+        Button(onClick = { viewModel.backupWallet() }) {
+            Text(text = "Backup Wallet")
+        }
+
+        Button(onClick = { viewModel.recoverWallet() }) {
+            Text(text = "Recover Wallet")
+        }
     }
 }
