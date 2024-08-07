@@ -31,12 +31,10 @@ class HomeViewModel @Inject constructor(
     }
 
     private suspend fun fetchWalletBalance() {
-        launchOperation {
-            val balance = portalRepository.getWalletBalance()
-            updateState { it.copy(
-                solanaBalance = balance.solanaBalance,
-                pyUsdBalance = balance.pyUsdBalance)
-            }
+        val balance = portalRepository.getWalletBalance()
+        updateState { it.copy(
+            solanaBalance = balance.solanaBalance,
+            pyUsdBalance = balance.pyUsdBalance)
         }
     }
 
