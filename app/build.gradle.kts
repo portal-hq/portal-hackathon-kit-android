@@ -48,6 +48,10 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+    // Allow references to generated code
+    kapt {
+        correctErrorTypes = true
+    }
 }
 
 dependencies {
@@ -86,6 +90,9 @@ dependencies {
     implementation(libs.androidx.hilt.navigation.compose)
     implementation(libs.dagger.hilt)
     kapt(libs.dagger.hilt.compiler)
+
+    // Portal SDK
+    implementation(libs.portal.android)
 
     // Testing related libs
     testImplementation(libs.junit)

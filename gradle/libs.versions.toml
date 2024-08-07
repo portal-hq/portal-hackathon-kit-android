@@ -14,6 +14,7 @@ timber = "5.0.1"
 navigation = "2.7.7"
 hilt = "1.2.0"
 dagger-hilt = "2.49"
+portal = "4.1.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -43,6 +44,7 @@ androidx-navigation-compose = { group = "androidx.navigation", name = "navigatio
 androidx-hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt" }
 dagger-hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "dagger-hilt"}
 dagger-hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "dagger-hilt" }
+portal-android = { group = "io.portalhq.android", name = "portal-android", version.ref = "portal" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
