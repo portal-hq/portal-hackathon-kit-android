@@ -1,7 +1,10 @@
 package io.portalhq.portalhackathon.data
 
 import io.portalhq.android.Portal
+import io.portalhq.android.provider.data.PortalRequestMethod
 import io.portalhq.android.storage.mobile.PortalNamespace
+import io.portalhq.portalhackathon.core.commonconstants.BlockChainConstants
+import io.portalhq.portalhackathon.data.apimodels.BuildTransactionApiRequest
 import io.portalhq.portalhackathon.data.datamodels.UserBalance
 import javax.inject.Inject
 
@@ -31,5 +34,19 @@ class PortalRepository @Inject constructor(
             solanaBalance = assets.nativeBalance.balance,
             pyUsdBalance = assets.pyUsdBalance
         )
+    }
+
+    suspend fun sendPyUSD(amount: String, recipientAddress: String): String {
+        val transaction = portalSolanaApi.buildTransaction(
+            BuildTransactionApiRequest(
+                amount = amount,
+                to = recipientAddress
+            )
+        )
+        return portal.request(
+            chainId = BlockChainConstants.SOLANA_DEV_NET_CHAIN_ID,
+            method = PortalRequestMethod.sol_signAndSendTransaction,
+            params = listOf(transaction.transaction)
+        ).result as String
     }
 }

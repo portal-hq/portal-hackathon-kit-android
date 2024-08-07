@@ -21,13 +21,13 @@ abstract class BaseViewModel<VIEW_STATE: ViewState> : ViewModel() {
 
     @Suppress("detekt:TooGenericExceptionCaught")
     protected open fun launchWithErrorHandling(
-        onError: (Exception) -> Unit = {},
+        onError: (Throwable) -> Unit = {},
         block: suspend () -> Unit
     ) {
         viewModelScope.launch {
             try {
                 block()
-            } catch (e: Exception) {
+            } catch (e: Throwable) {
                 onError(e)
             }
         }

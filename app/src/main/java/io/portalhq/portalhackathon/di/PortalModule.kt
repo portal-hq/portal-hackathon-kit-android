@@ -31,7 +31,8 @@ object PortalModule {
                 SOLANA_DEV_NET_CHAIN_ID to "https://solana-devnet.g.alchemy.com/v2/$ALCHEMY_API_KEY",
             ),
             legacyEthChainId = 0, // this is for legacy code and no longer relevant in this new Portal SDK
-            keychain = Keychain()
+            keychain = Keychain(),
+            autoApprove = true
         )
     }
 

@@ -7,5 +7,6 @@ data class HomeViewState(
     val isRefreshing: Boolean = false,
     val walletAddress: String? = null,
     val solanaBalance: String? = null,
-    val pyUsdBalance: String? = null
+    val pyUsdBalance: String? = null,
+    val mostRecentTransactionHash: String? = null,
 ) : ViewState

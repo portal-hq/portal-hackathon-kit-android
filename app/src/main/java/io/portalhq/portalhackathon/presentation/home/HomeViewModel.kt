@@ -46,6 +46,25 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun sendPyUsd(amount: String, recipientAddress: String) {
+        if (recipientAddress.isBlank()) {
+            notify("Please enter a valid recipient address")
+            return
+        }
+
+        if (amount.isBlank() || amount.toIntOrNull() == null){
+            notify("Please enter a valid amount")
+            return
+        }
+
+        launchOperation {
+            val transactionHash = portalRepository.sendPyUSD(amount, recipientAddress)
+            updateState { it.copy(mostRecentTransactionHash = transactionHash) }
+            notify("Transaction sent successfully")
+            fetchWalletBalance()
+        }
+    }
+
     private fun launchOperation(operation: suspend () -> Unit) {
         launchWithDefaultErrorHandling(onEndWithError = {
             updateState { it.copy(isDataLoading = false, isRefreshing = false) }
