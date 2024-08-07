@@ -10,8 +10,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import timber.log.Timber
-import java.io.IOException
-import java.util.concurrent.TimeoutException
 
 abstract class ScreenBaseViewModel<VIEW_STATE : ViewState> : BaseViewModel<VIEW_STATE>() {
 
@@ -49,8 +47,8 @@ abstract class ScreenBaseViewModel<VIEW_STATE : ViewState> : BaseViewModel<VIEW_
         launchWithErrorHandling(
             onError = {
                 onEndWithError()
-                notifyError(it.message)
-                Timber.e("onEndWithError ${parseException(it)}")
+                notifyError(it.message ?: it.toString())
+                Timber.e("onEndWithError $it")
             },
             block = block
         )
@@ -58,22 +56,10 @@ abstract class ScreenBaseViewModel<VIEW_STATE : ViewState> : BaseViewModel<VIEW_
 
     protected fun <T> Flow<T>.catchWithDefaultErrorHandler(doOnError: () -> Unit = {}): Flow<T> {
         return catch { cause: Throwable ->
-            val message = parseException(cause)
+            val message = cause.message ?: cause.toString()
             doOnError()
             notifyError(message)
             Timber.e(message)
-        }
-    }
-
-    private fun parseException(exception: Throwable): String? {
-        return when (exception) {
-            is java.io.InterruptedIOException,
-            is java.net.UnknownHostException,
-            is javax.net.ssl.SSLException,
-            is java.net.NoRouteToHostException,
-            is java.net.SocketException -> exception.message
-            is IOException, is TimeoutException -> exception.message
-            else -> exception.message
         }
     }
 
