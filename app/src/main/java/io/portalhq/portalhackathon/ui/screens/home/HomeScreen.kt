@@ -3,6 +3,7 @@ package io.portalhq.portalhackathon.ui.screens.home
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -67,7 +68,9 @@ private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
             return
         }
 
-        Text(text = "Wallet Address: ${viewState.walletAddress}")
+        SelectionContainer {
+            Text(text = "Wallet Address: ${viewState.walletAddress}")
+        }
         Text(text = "Solana Balance: ${viewState.solanaBalance}")
         Text(text = "PyUSD Balance: ${ viewState.pyUsdBalance }")
     }
