@@ -15,6 +15,11 @@ class HomeViewModel @Inject constructor(
         fetchWalletDetails()
     }
 
+    fun refresh() {
+        updateState { it.copy(isRefreshing = true) }
+        fetchWalletDetails()
+    }
+
     private fun fetchWalletDetails() {
         launchOperation {
             val walletAddress = portalRepository.getWalletAddress()
@@ -45,11 +50,11 @@ class HomeViewModel @Inject constructor(
 
     private fun launchOperation(operation: suspend () -> Unit) {
         launchWithDefaultErrorHandling(onEndWithError = {
-            updateState { it.copy(isDataLoading = false) }
+            updateState { it.copy(isDataLoading = false, isRefreshing = false) }
         }) {
             updateState { it.copy(isDataLoading = true) }
             operation()
-            updateState { it.copy(isDataLoading = false) }
+            updateState { it.copy(isDataLoading = false, isRefreshing = false) }
         }
     }
 }

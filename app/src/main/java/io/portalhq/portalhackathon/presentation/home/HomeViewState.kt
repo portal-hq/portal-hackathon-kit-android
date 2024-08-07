@@ -4,6 +4,7 @@ import io.portalhq.portalhackathon.core.viewstate.ViewState
 
 data class HomeViewState(
     val isDataLoading: Boolean = false,
+    val isRefreshing: Boolean = false,
     val walletAddress: String? = null,
     val solanaBalance: String? = null,
     val pyUsdBalance: String? = null
