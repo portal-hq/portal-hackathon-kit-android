@@ -1,8 +1,9 @@
 package io.portalhq.portalhackathon.data
 
+import io.portalhq.portalhackathon.data.apimodels.GetAssetsApiResponse
 import retrofit2.http.GET
 
 interface PortalSolanaApi {
     @GET("assets/")
-    suspend fun getAssets(): List<Any>
+    suspend fun getAssets(): GetAssetsApiResponse
 }

@@ -9,4 +9,7 @@ object BlockChainConstants {
 
     // Alchemy API
     const val ALCHEMY_API_KEY = "ExD4AhsURGGgGXK7455Pekt-FkCwSKEn"
+
+    // PYUSD
+    const val PYUSD_TOKEN_SYMBOL = "PYUSD"
 }

@@ -12,25 +12,44 @@ class HomeViewModel @Inject constructor(
     override fun defaultViewState() = HomeViewState()
 
     init {
-        launchWithDefaultErrorHandling(onEndWithError = {
-            updateState { it.copy(isDataLoading = false) }
-        }) {
-            updateState { it.copy(isDataLoading = true) }
+        fetchWalletDetails()
+    }
+
+    private fun fetchWalletDetails() {
+        launchOperation {
             val walletAddress = portalRepository.getWalletAddress()
-            updateState { it.copy(isDataLoading = false, walletAddress = walletAddress) }
+            updateState { it.copy(walletAddress = walletAddress) }
+            if (walletAddress != null) {
+                fetchWalletBalance()
+            }
+        }
+    }
+
+    private suspend fun fetchWalletBalance() {
+        launchOperation {
+            val balance = portalRepository.getWalletBalance()
+            updateState { it.copy(
+                solanaBalance = balance.solanaBalance,
+                pyUsdBalance = balance.pyUsdBalance)
+            }
         }
     }
 
     fun generateWallet() {
+        launchOperation {
+            portalRepository.createWallet()
+            val walletAddress = portalRepository.getWalletAddress()
+            updateState { it.copy(walletAddress = walletAddress) }
+        }
+    }
+
+    private fun launchOperation(operation: suspend () -> Unit) {
         launchWithDefaultErrorHandling(onEndWithError = {
             updateState { it.copy(isDataLoading = false) }
         }) {
             updateState { it.copy(isDataLoading = true) }
-
-            portalRepository.createWallet()
-            val walletAddress = portalRepository.getWalletAddress()
-
-            updateState { it.copy(isDataLoading = false, walletAddress = walletAddress) }
+            operation()
+            updateState { it.copy(isDataLoading = false) }
         }
     }
 }

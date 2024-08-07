@@ -55,7 +55,8 @@ fun HomeScreen(
 @Composable
 private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
     Column(
-        modifier = Modifier.padding(20.dp)
+        modifier = Modifier
+            .padding(20.dp)
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -67,5 +68,7 @@ private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
         }
 
         Text(text = "Wallet Address: ${viewState.walletAddress}")
+        Text(text = "Solana Balance: ${viewState.solanaBalance}")
+        Text(text = "PyUSD Balance: ${ viewState.pyUsdBalance }")
     }
 }
