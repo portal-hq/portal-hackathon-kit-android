@@ -2,17 +2,35 @@ package io.portalhq.portalhackathon.presentation.home
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.portalhq.portalhackathon.core.viewmodel.ScreenBaseViewModel
+import io.portalhq.portalhackathon.data.PortalRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor() : ScreenBaseViewModel<HomeViewState>() {
+class HomeViewModel @Inject constructor(
+    private val portalRepository: PortalRepository
+) : ScreenBaseViewModel<HomeViewState>() {
     override fun defaultViewState() = HomeViewState()
 
-    fun showToast(message: String) {
-        notify(message)
+    init {
+        launchWithErrorHandling(onError = {
+            updateState { it.copy(isDataLoading = false) }
+        }) {
+            updateState { it.copy(isDataLoading = true) }
+            val walletAddress = portalRepository.getWalletAddress()
+            updateState { it.copy(isDataLoading = false, walletAddress = walletAddress) }
+        }
     }
 
-    fun showSnackbar(message: String) {
-        notifyImportant(message)
+    fun generateWallet() {
+        launchWithErrorHandling(onError = {
+            updateState { it.copy(isDataLoading = false) }
+        }) {
+            updateState { it.copy(isDataLoading = true) }
+
+            portalRepository.createWallet()
+            val walletAddress = portalRepository.getWalletAddress()
+
+            updateState { it.copy(isDataLoading = false, walletAddress = walletAddress) }
+        }
     }
 }

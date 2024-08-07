@@ -1,15 +1,17 @@
 package io.portalhq.portalhackathon.ui.screens.home
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import io.portalhq.portalhackathon.presentation.home.HomeViewModel
@@ -52,16 +54,18 @@ fun HomeScreen(
 
 @Composable
 private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
-    var counter by remember {
-        mutableIntStateOf(0)
-    }
-    Column {
-        Text(text = "Home Screen - Hello World with address: ${viewState.solanaAddress}")
-        Button(onClick = { viewModel.showToast("Hello World ${counter++}") }) {
-            Text(text = "Show Toast")
+    Column(
+        modifier = Modifier.padding(20.dp)
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        if (viewState.walletAddress == null) {
+            Button(onClick = { viewModel.generateWallet() }) {
+                Text(text = "Generate Wallet")
+            }
+            return
         }
-        Button(onClick = { viewModel.showSnackbar("Hello World ${counter++}") }) {
-            Text(text = "Show Snackbar")
-        }
+
+        Text(text = "Wallet Address: ${viewState.walletAddress}")
     }
 }
