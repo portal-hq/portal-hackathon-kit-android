@@ -12,7 +12,7 @@ class HomeViewModel @Inject constructor(
     override fun defaultViewState() = HomeViewState()
 
     init {
-        launchWithErrorHandling(onError = {
+        launchWithDefaultErrorHandling(onEndWithError = {
             updateState { it.copy(isDataLoading = false) }
         }) {
             updateState { it.copy(isDataLoading = true) }
@@ -22,7 +22,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun generateWallet() {
-        launchWithErrorHandling(onError = {
+        launchWithDefaultErrorHandling(onEndWithError = {
             updateState { it.copy(isDataLoading = false) }
         }) {
             updateState { it.copy(isDataLoading = true) }
