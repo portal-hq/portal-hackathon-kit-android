@@ -83,7 +83,7 @@ class HomeViewModel @Inject constructor(
         launchWithDefaultErrorHandling(onEndWithError = {
             updateState { it.copy(isDataLoading = false, isRefreshing = false) }
         }) {
-            updateState { it.copy(isDataLoading = true) }
+            updateState { it.copy(isDataLoading = !it.isRefreshing) }
             operation()
             updateState { it.copy(isDataLoading = false, isRefreshing = false) }
         }
