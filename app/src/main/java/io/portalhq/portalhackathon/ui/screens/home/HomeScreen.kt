@@ -2,6 +2,7 @@ package io.portalhq.portalhackathon.ui.screens.home
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -10,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
@@ -29,6 +31,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import io.portalhq.portalhackathon.core.commonconstants.BlockChainConstants
@@ -92,6 +95,84 @@ fun HomeScreen(
 
 @Composable
 private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
+    Column(
+        modifier = Modifier
+            .padding(vertical = 10.dp, horizontal = 20.dp)
+            .fillMaxSize(),
+    ) {
+        if (viewState.walletAddress == null) {
+            GenerateWallet(viewModel = viewModel, viewState = viewState)
+            return
+        }
+
+        WalletDetails(viewState = viewState)
+        TransferPyUSD(viewModel = viewModel, viewState = viewState)
+        WalletBackupAndRecovery(viewModel = viewModel, viewState = viewState)
+    }
+}
+
+@Composable
+private fun ColumnScope.GenerateWallet(viewModel: HomeViewModel, viewState: HomeViewState) {
+    Text(
+        modifier = Modifier.padding(top = 10.dp),
+        text = "No wallet found on device. Let's create one!",
+        style = MaterialTheme.typography.body2
+    )
+
+    Button(
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(top = 10.dp),
+        onClick = { viewModel.generateWallet() },
+        enabled = viewState.areActionsAllowed
+    ) {
+        Text(text = "Generate Wallet")
+    }
+}
+
+@Composable
+private fun ColumnScope.WalletDetails(viewState: HomeViewState) {
+    Text(
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+        text = "Wallet Details",
+        style = MaterialTheme.typography.h6.copy(fontSize = 22.sp)
+    )
+
+    Text(
+        modifier = Modifier.padding(top = 10.dp),
+        text = "Wallet Address",
+        style = MaterialTheme.typography.subtitle2.copy(fontSize = 16.sp)
+    )
+    SelectionContainer {
+        Text(
+            text = viewState.walletAddress.orEmpty(),
+            style = MaterialTheme.typography.body2
+        )
+    }
+
+    Text(
+        modifier = Modifier.padding(top = 10.dp),
+        text = "Solana Balance",
+        style = MaterialTheme.typography.subtitle2.copy(fontSize = 16.sp)
+    )
+    Text(
+        text = "${viewState.solanaBalance ?: "0"} SOL",
+        style = MaterialTheme.typography.body2
+    )
+
+    Text(
+        modifier = Modifier.padding(top = 10.dp),
+        text = "PyUSD Balance",
+        style = MaterialTheme.typography.subtitle2.copy(fontSize = 16.sp)
+    )
+    Text(
+        text = "${viewState.pyUsdBalance ?: "0"} PyUSD",
+        style = MaterialTheme.typography.body2
+    )
+}
+
+@Composable
+private fun ColumnScope.TransferPyUSD(viewModel: HomeViewModel, viewState: HomeViewState) {
     var recipientAddress by remember {
         mutableStateOf(BlockChainConstants.SOLANA_TEST_ADDRESS)
     }
@@ -100,78 +181,91 @@ private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
         mutableStateOf("5")
     }
 
-    Column(
+    Text(
         modifier = Modifier
-            .padding(20.dp)
+            .align(Alignment.CenterHorizontally)
+            .padding(top = 10.dp),
+        text = "Transfer PyUSD",
+        style = MaterialTheme.typography.h6.copy(fontSize = 20.sp)
+    )
+
+    Text(
+        modifier = Modifier.padding(top = 10.dp),
+        text = "Recipient Address",
+        style = MaterialTheme.typography.subtitle2.copy(fontSize = 16.sp)
+    )
+    TextField(
+        modifier = Modifier
             .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        if (viewState.walletAddress == null) {
-            Button(onClick = { viewModel.generateWallet() }) {
-                Text(text = "Generate Wallet")
-            }
-            return
-        }
+        value = recipientAddress,
+        singleLine = true,
+        onValueChange = { value -> recipientAddress = value },
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
+    )
 
+    Text(
+        modifier = Modifier.padding(top = 10.dp),
+        text = "Amount",
+        style = MaterialTheme.typography.subtitle2.copy(fontSize = 16.sp)
+    )
+    TextField(
+        modifier = Modifier
+            .fillMaxSize(),
+        value = amount,
+        singleLine = true,
+        placeholder = { Text(text = "0.0") },
+        onValueChange = { value -> amount = value },
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
+        colors = TextFieldDefaults.textFieldColors()
+    )
+
+    if (viewState.mostRecentTransactionHash != null) {
         SelectionContainer {
-            Text(text = "Wallet Address: ${viewState.walletAddress}")
+            Text(text = "Most recent transaction hash: ${viewState.mostRecentTransactionHash}")
         }
-        Text(text = "Solana Balance: ${viewState.solanaBalance ?: "0"}")
-        Text(text = "PyUSD Balance: ${viewState.pyUsdBalance ?: "0"}")
+    }
 
-        TextField(
-            modifier = Modifier
-                .padding(5.dp)
-                .fillMaxSize(),
-            label = {
-                Text(
-                    modifier = Modifier.padding(bottom = 5.dp),
-                    text = "Recipient Address"
-                )
-            },
-            value = recipientAddress,
-            singleLine = true,
-            onValueChange = { value -> recipientAddress = value },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text)
-        )
+    Button(
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(top = 10.dp),
+        onClick = {
+            viewModel.sendPyUsd(
+                amount = amount,
+                recipientAddress = recipientAddress
+            )
+        },
+        enabled = viewState.areActionsAllowed
+    ) {
+        Text(text = "Transfer PYUSD")
+    }
+}
 
-        TextField(
-            modifier = Modifier
-                .padding(5.dp)
-                .fillMaxSize(),
-            label = { Text(text = "Enter Amount") },
-            value = amount,
-            singleLine = true,
-            placeholder = { Text(text = "0.0") },
-            onValueChange = { value -> amount = value },
-            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Decimal),
-            colors = TextFieldDefaults.textFieldColors()
-        )
+@Composable
+private fun ColumnScope.WalletBackupAndRecovery(viewModel: HomeViewModel, viewState: HomeViewState) {
+    Text(
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(top = 20.dp),
+        text = "Backup & Recovery",
+        style = MaterialTheme.typography.h6.copy(fontSize = 20.sp)
+    )
 
-        Button(
-            onClick = {
-                viewModel.sendPyUsd(
-                    amount = amount,
-                    recipientAddress = recipientAddress
-                )
-            },
-            enabled = viewState.areActionsAllowed
-        ) {
-            Text(text = "Transfer PYUSD")
-        }
+    Button(
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(top = 10.dp),
+        onClick = { viewModel.backupWallet() },
+        enabled = viewState.areActionsAllowed
+    ) {
+        Text(text = "Backup Wallet")
+    }
 
-        if (viewState.mostRecentTransactionHash != null) {
-            SelectionContainer {
-                Text(text = "Most recent transaction hash: ${viewState.mostRecentTransactionHash}")
-            }
-        }
-
-        Button(onClick = { viewModel.backupWallet() }, enabled = viewState.areActionsAllowed) {
-            Text(text = "Backup Wallet")
-        }
-
-        Button(onClick = { viewModel.recoverWallet() }, enabled = viewState.areActionsAllowed) {
-            Text(text = "Recover Wallet")
-        }
+    Button(
+        modifier = Modifier.align(Alignment.CenterHorizontally),
+        onClick = { viewModel.recoverWallet() },
+        enabled = viewState.areActionsAllowed)
+    {
+        Text(text = "Recover Wallet")
     }
 }
