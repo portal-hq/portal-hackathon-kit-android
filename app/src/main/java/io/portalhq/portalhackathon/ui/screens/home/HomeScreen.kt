@@ -102,11 +102,12 @@ private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
     ) {
         if (viewState.walletAddress == null) {
             GenerateWallet(viewModel = viewModel, viewState = viewState)
-            return
         }
 
-        WalletDetails(viewState = viewState)
-        TransferPyUSD(viewModel = viewModel, viewState = viewState)
+        if (viewState.walletAddress != null) {
+            WalletDetails(viewState = viewState)
+            TransferPyUSD(viewModel = viewModel, viewState = viewState)
+        }
         WalletBackupAndRecovery(viewModel = viewModel, viewState = viewState)
     }
 }
@@ -246,19 +247,20 @@ private fun ColumnScope.WalletBackupAndRecovery(viewModel: HomeViewModel, viewSt
     Text(
         modifier = Modifier
             .align(Alignment.CenterHorizontally)
-            .padding(top = 20.dp),
+            .padding(top = 20.dp, bottom = 10.dp),
         text = "Backup & Recovery",
         style = MaterialTheme.typography.h6.copy(fontSize = 20.sp)
     )
 
-    Button(
-        modifier = Modifier
-            .align(Alignment.CenterHorizontally)
-            .padding(top = 10.dp),
-        onClick = { viewModel.backupWallet() },
-        enabled = viewState.areActionsAllowed
-    ) {
-        Text(text = "Backup Wallet")
+    if (viewState.walletAddress != null) {
+        Button(
+            modifier = Modifier
+                .align(Alignment.CenterHorizontally),
+            onClick = { viewModel.backupWallet() },
+            enabled = viewState.areActionsAllowed
+        ) {
+            Text(text = "Backup Wallet")
+        }
     }
 
     Button(
