@@ -117,16 +117,18 @@ private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
             Text(text = "Wallet Address: ${viewState.walletAddress}")
         }
         Text(text = "Solana Balance: ${viewState.solanaBalance ?: "0"}")
-        Text(text = "PyUSD Balance: ${ viewState.pyUsdBalance ?: "0" }")
+        Text(text = "PyUSD Balance: ${viewState.pyUsdBalance ?: "0"}")
 
         TextField(
             modifier = Modifier
                 .padding(5.dp)
                 .fillMaxSize(),
-            label = { Text(
-                modifier = Modifier.padding(bottom = 5.dp),
-                text = "Recipient Address"
-            )},
+            label = {
+                Text(
+                    modifier = Modifier.padding(bottom = 5.dp),
+                    text = "Recipient Address"
+                )
+            },
             value = recipientAddress,
             singleLine = true,
             onValueChange = { value -> recipientAddress = value },
@@ -137,7 +139,7 @@ private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
             modifier = Modifier
                 .padding(5.dp)
                 .fillMaxSize(),
-            label = { Text(text = "Enter Amount")},
+            label = { Text(text = "Enter Amount") },
             value = amount,
             singleLine = true,
             placeholder = { Text(text = "0.0") },
@@ -146,12 +148,15 @@ private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
             colors = TextFieldDefaults.textFieldColors()
         )
 
-        Button(onClick = {
-            viewModel.sendPyUsd(
-                amount = amount,
-                recipientAddress = recipientAddress
-            )
-        }) {
+        Button(
+            onClick = {
+                viewModel.sendPyUsd(
+                    amount = amount,
+                    recipientAddress = recipientAddress
+                )
+            },
+            enabled = viewState.areActionsAllowed
+        ) {
             Text(text = "Transfer PYUSD")
         }
 
@@ -161,11 +166,11 @@ private fun HomeScreenUI(viewModel: HomeViewModel, viewState: HomeViewState) {
             }
         }
 
-        Button(onClick = { viewModel.backupWallet() }) {
+        Button(onClick = { viewModel.backupWallet() }, enabled = viewState.areActionsAllowed) {
             Text(text = "Backup Wallet")
         }
 
-        Button(onClick = { viewModel.recoverWallet() }) {
+        Button(onClick = { viewModel.recoverWallet() }, enabled = viewState.areActionsAllowed) {
             Text(text = "Recover Wallet")
         }
     }

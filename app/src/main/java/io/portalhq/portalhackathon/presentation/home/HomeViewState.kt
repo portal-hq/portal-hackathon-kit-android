@@ -9,4 +9,6 @@ data class HomeViewState(
     val solanaBalance: String? = null,
     val pyUsdBalance: String? = null,
     val mostRecentTransactionHash: String? = null,
-) : ViewState
+) : ViewState {
+    val areActionsAllowed = !isDataLoading && !isRefreshing
+}
