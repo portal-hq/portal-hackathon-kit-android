@@ -3,6 +3,7 @@ package io.portalhq.portalhackathon.presentation.home
 import dagger.hilt.android.lifecycle.HiltViewModel
 import io.portalhq.portalhackathon.core.viewmodel.ScreenBaseViewModel
 import io.portalhq.portalhackathon.data.PortalRepository
+import kotlinx.coroutines.delay
 import javax.inject.Inject
 
 @HiltViewModel
@@ -60,6 +61,8 @@ class HomeViewModel @Inject constructor(
             val transactionHash = portalRepository.sendPyUSD(amount, recipientAddress)
             updateState { it.copy(mostRecentTransactionHash = transactionHash) }
             notify("Transaction sent successfully")
+
+            delay(15000)
             fetchWalletBalance()
         }
     }
