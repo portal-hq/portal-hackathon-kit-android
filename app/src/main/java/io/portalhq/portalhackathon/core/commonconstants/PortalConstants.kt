@@ -2,7 +2,6 @@ package io.portalhq.portalhackathon.core.commonconstants
 
 object PortalConstants {
     const val PORTAL_CLIENT_API_KEY = "YOUR API KEY"
-    const val PORTAL_CLIENT_ID = "YOUR_CLIENT_ID"
 
     // Portal Solana API URLs
     const val PORTAL_SOLANA_DEV_NET_API_URL = "https://api.portalhq.io/api/v3/clients/me/chains/solana-devnet/"
