@@ -41,8 +41,7 @@ class HomeViewModel @Inject constructor(
     fun generateWallet() {
         launchOperation {
             portalRepository.createWallet()
-            val walletAddress = portalRepository.getWalletAddress()
-            updateState { it.copy(walletAddress = walletAddress) }
+            fetchWalletDetails()
         }
     }
 
