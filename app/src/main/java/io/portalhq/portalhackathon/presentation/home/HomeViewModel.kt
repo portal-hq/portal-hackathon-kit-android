@@ -75,6 +75,7 @@ class HomeViewModel @Inject constructor(
         launchOperation {
             portalRepository.recoverWalletWithPassword()
             notify("Wallet recovered successfully")
+            fetchWalletDetails()
         }
     }
 
