@@ -11,13 +11,18 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Icon
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.TextField
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Visibility
+import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Button
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
@@ -30,6 +35,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -163,11 +170,11 @@ private fun ColumnScope.WalletDetails(viewState: HomeViewState) {
 
     Text(
         modifier = Modifier.padding(top = 10.dp),
-        text = "PyUSD Balance",
+        text = "PYUSD Balance",
         style = MaterialTheme.typography.subtitle2.copy(fontSize = 16.sp)
     )
     Text(
-        text = "${viewState.pyUsdBalance ?: "0"} PyUSD",
+        text = "${viewState.pyUsdBalance ?: "0"} PYUSD",
         style = MaterialTheme.typography.body2
     )
 }
@@ -186,7 +193,7 @@ private fun ColumnScope.TransferPyUSD(viewModel: HomeViewModel, viewState: HomeV
         modifier = Modifier
             .align(Alignment.CenterHorizontally)
             .padding(top = 10.dp),
-        text = "Transfer PyUSD",
+        text = "Transfer PYUSD",
         style = MaterialTheme.typography.h6.copy(fontSize = 20.sp)
     )
 
@@ -244,6 +251,13 @@ private fun ColumnScope.TransferPyUSD(viewModel: HomeViewModel, viewState: HomeV
 
 @Composable
 private fun ColumnScope.WalletBackupAndRecovery(viewModel: HomeViewModel, viewState: HomeViewState) {
+    var password by remember {
+        mutableStateOf("0000")
+    }
+    var isPasswordVisible by remember {
+        mutableStateOf(false)
+    }
+
     Text(
         modifier = Modifier
             .align(Alignment.CenterHorizontally)
@@ -252,11 +266,34 @@ private fun ColumnScope.WalletBackupAndRecovery(viewModel: HomeViewModel, viewSt
         style = MaterialTheme.typography.h6.copy(fontSize = 20.sp)
     )
 
+    Text(
+        modifier = Modifier.padding(bottom = 10.dp),
+        text = "Password",
+        style = MaterialTheme.typography.subtitle2.copy(fontSize = 16.sp)
+    )
+    TextField(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(bottom = 10.dp),
+        value = password,
+        singleLine = true,
+        onValueChange = { value -> password = value },
+        keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Password),
+        visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
+        trailingIcon = {
+            val icon = if (isPasswordVisible) Icons.Filled.VisibilityOff else Icons.Filled.Visibility
+            val description = if (isPasswordVisible) "Hide Password" else "Show Password"
+            IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
+                Icon(imageVector = icon, contentDescription = description)
+            }
+        }
+    )
+
     if (viewState.walletAddress != null) {
         Button(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally),
-            onClick = { viewModel.backupWallet() },
+            onClick = { viewModel.backupWallet(password) },
             enabled = viewState.areActionsAllowed
         ) {
             Text(text = "Backup Wallet")
@@ -265,7 +302,7 @@ private fun ColumnScope.WalletBackupAndRecovery(viewModel: HomeViewModel, viewSt
 
     Button(
         modifier = Modifier.align(Alignment.CenterHorizontally),
-        onClick = { viewModel.recoverWallet() },
+        onClick = { viewModel.recoverWallet(password) },
         enabled = viewState.areActionsAllowed)
     {
         Text(text = "Recover Wallet")

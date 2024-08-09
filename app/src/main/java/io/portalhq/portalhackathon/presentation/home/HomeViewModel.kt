@@ -67,16 +67,25 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun backupWallet() {
+    fun backupWallet(password: String) {
+        if (password.length < 4) {
+            notify("Password must be at least 4 characters long")
+            return
+        }
+
         launchOperation {
-            portalRepository.backupWalletWithPassword()
+            portalRepository.backupWalletWithPassword(password)
             notify("Wallet backed up successfully")
         }
     }
 
-    fun recoverWallet() {
+    fun recoverWallet(password: String) {
+        if (password.length < 4) {
+            notify("Password must be at least 4 characters long")
+            return
+        }
         launchOperation {
-            portalRepository.recoverWalletWithPassword()
+            portalRepository.recoverWalletWithPassword(password)
             notify("Wallet recovered successfully")
             fetchWalletDetails()
         }
