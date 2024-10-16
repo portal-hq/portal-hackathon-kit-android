@@ -1,4 +1,4 @@
-# Portal Hackathon Helper Repository
+# Portal Hackathon Kit - Android
 
 This repository shows you how you can easily integrate Solana blockchain into your Android app using the [Portal Android SDK](https://docs.portalhq.io/guides/android). It covers the following features.
 
@@ -57,7 +57,7 @@ To fully test this app (like for example to transfer funds) you will need to loa
 #### Backup and Recover Demo
 ![Generate Wallet](demos/wallet-backup-and-recovery.gif)
 
-## Portal & PYUSD Documentation
+## Portal Documentation
 
 ### Portal SDK Reference
 
@@ -102,4 +102,4 @@ Portal supplies several APIs for simplifying your development.
 
 ## Help
 
-Need help or want to request a feature? Reach out to the PayPal & Portal teams on the [official hackathon Slack channel](https://portalcommunity.slack.com/archives/C07EZFF9N78).
+Need help or want to request a feature? Reach out to us on the [official Portal Community Slack](https://portalcommunity.slack.com/archives/C07EZFF9N78).
