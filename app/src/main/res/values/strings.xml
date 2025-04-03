@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Portal Hackathon</string>
+    <string name="general_unknown_error_message">Unknown error occurred</string>
 </resources>
